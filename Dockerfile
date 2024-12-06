@@ -8,7 +8,7 @@ RUN apk add --update git \
     && git clone https://github.com/${REPOSITORY} mosdns \
 	&& cd ./mosdns \
 	&& git fetch --all --tags \
-	&& git checkout tags/${TAG} \
+	&& git checkout ${TAG} \
     && go build -ldflags "-s -w -X main.version=${TAG}" -trimpath -o mosdns
 
 FROM --platform=${TARGETPLATFORM} alpine:latest
