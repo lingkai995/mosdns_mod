@@ -18,21 +18,18 @@ COPY --from=builder /root/mosdns/mosdns /usr/bin/
 
 RUN apk add --no-cache ca-certificates && \
     mkdir /etc/mosdns && \
-    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
     apk --no-cache add curl && \
     apk --no-cache add dcron && \
-    apk --no-cache add npm && \
-    npm config set registry=https://registry.npmmirror.com && \
     apk --no-cache add tzdata && \
     apk --no-cache add ncurses && \
-    npm install -g http-server && \
+    apk --no-cache add supervisor && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
     echo "Asia/Shanghai" > /etc/timezone && \
     echo "33 3 * * * /bin/sh /app/get_cn.sh > /proc/1/fd/1 2>&1" > /etc/crontabs/root
 
 COPY ./get_cn.sh /app/
-COPY ./start.sh /app/
-ENV proxy=""
-VOLUME /etc/mosdns
+COPY ./supervisord.conf /app/
+ENV PROXY=""
+
 EXPOSE 53/udp 53/tcp
-CMD ["/app/start.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/app/supervisord.conf"]

@@ -33,4 +33,9 @@ else
     echo "PID 文件不存在，无法发送 SIGHUP 信号"
 fi
 
+# 启动 mosdns
+echo "重新启动 mosdns..."
+/usr/bin/mosdns start --dir /etc/mosdns &
+echo $! > /app/mosdns.pid
+
 exit 0
