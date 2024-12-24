@@ -1,5 +1,15 @@
 #!/bin/sh
 
+# 尝试从环境变量中读取代理地址
+if [ -n "$PROXY" ]; then
+    proxy="$PROXY"
+elif [ -n "$proxy" ]; then
+    proxy="$proxy"
+else
+    # 从文件中读取代理地址
+    read -r proxy < /etc/mosdns/PROXY
+fi
+
 # 如果代理变量非空，则设置 curl 命令使用代理
 if [ -n "$proxy" ]; then
 	    CURL_COMMAND="curl --progress-bar --show-error -x $proxy -o"
