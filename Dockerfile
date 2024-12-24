@@ -18,6 +18,7 @@ COPY --from=builder /root/mosdns/mosdns /usr/bin/
 
 RUN apk add --no-cache ca-certificates && \
     mkdir /etc/mosdns && \
+    chown -R root:root /etc/mosdns && \
     apk --no-cache add curl && \
     apk --no-cache add dcron && \
     apk --no-cache add tzdata && \
